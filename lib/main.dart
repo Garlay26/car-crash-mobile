@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/views/home_main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +12,9 @@ void main() async{
   Get.put(DataController());
   WidgetsFlutterBinding.ensureInitialized();
   await Future.delayed(const Duration(seconds: 1));
+  if(Platform.isAndroid){
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
   runApp(const MyApp());
 }
 

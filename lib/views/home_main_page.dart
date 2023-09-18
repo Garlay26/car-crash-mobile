@@ -75,8 +75,8 @@ class _HomeMainPageState extends State<HomeMainPage> {
               currentTab.value = HomeTabs.values[value];
             },
             elevation: 10,
-            selectedItemColor: AppColors.black,
-            unselectedItemColor: AppColors.black.withOpacity(0.2),
+            selectedItemColor: AppColors.green1,
+            unselectedItemColor: AppColors.black.withOpacity(0.5),
             items: HomeTabs.values.map((e) {
               IconData icon = Icons.home_rounded;
               String title = '';

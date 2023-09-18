@@ -32,70 +32,75 @@ class HomeCrashListPage extends StatelessWidget {
           width: double.infinity,
           height: double.infinity,
           color: AppColors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                    bgPanel(),
-                    topPanel(),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: AppConstants.pagePadding,
-                        right: AppConstants.pagePadding,
-                        top: 20,
+          child: RefreshIndicator(
+            onRefresh: () async{
+              await controller.initLoad();
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      bgPanel(),
+                      topPanel(),
+                    ],
+                  ),
+                  if(!controller.xLoading)Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: AppConstants.pagePadding,
+                          right: AppConstants.pagePadding,
+                          top: 20,
+                        ),
+                        child: const Text(
+                          'Crashed Cars',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                      child: const Text(
-                        'Crashed Cars',
-                        style: TextStyle(fontSize: 18),
+                      crashListPanel(),
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: AppConstants.pagePadding,
+                          right: AppConstants.pagePadding,
+                          top: 20,
+                        ),
+                        child: Text(
+                          'Recommended Car For Sales',
+                          style: TextStyle(fontSize: 18,color: AppColors.black),
+                        ),
                       ),
-                    ),
-                    crashListPanel(),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: AppConstants.pagePadding,
-                        right: AppConstants.pagePadding,
-                        top: 20,
+                      saleListPanel(),
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: AppConstants.pagePadding,
+                          right: AppConstants.pagePadding,
+                          top: 20,
+                        ),
+                        child: const Text(
+                          'Advertising',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                      child: Text(
-                        'Recommended Car For Sales',
-                        style: TextStyle(fontSize: 18,color: AppColors.black),
+                      adsPanel(),
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: AppConstants.pagePadding,
+                          right: AppConstants.pagePadding,
+                          top: 20,
+                        ),
+                        child: const Text(
+                          'Recommended News',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    saleListPanel(),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: AppConstants.pagePadding,
-                        right: AppConstants.pagePadding,
-                        top: 20,
-                      ),
-                      child: const Text(
-                        'Advertising',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    adsPanel(),
-                    Container(
-                      margin: EdgeInsets.only(
-                        left: AppConstants.pagePadding,
-                        right: AppConstants.pagePadding,
-                        top: 20,
-                      ),
-                      child: const Text(
-                        'Recommended News',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    newsListPanel(),
-                  ],
-                )
-              ],
+                      newsListPanel(),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -238,6 +243,91 @@ class HomeCrashListPage extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget crashListPanel(){
+    HomeCrashListController controller = Get.find();
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      width: double.infinity,
+      height: Get.width * 0.5,
+      child: FlutterCarousel(
+        options: CarouselOptions(
+          autoPlay: true,
+          allowImplicitScrolling: true,
+          enlargeCenterPage: false,
+          showIndicator: false,
+          enableInfiniteScroll: true,
+        ),
+        items: controller.crashData.map((e) {
+          return GestureDetector(
+            onTap: () {
+              Get.to(()=> CarDetailPage(id: e.id));
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)
+              ),
+              elevation: 2,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Material(
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            e.images.first,
+                          ),
+                          fit: BoxFit.cover
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        const Spacer(),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 6),
+                          decoration: BoxDecoration(
+                              color: AppColors.black.withOpacity(0.8),
+                              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12))
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                e.description,
+                                style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600
+                                ),
+                                maxLines: 1,
+                              ),
+                              Text(
+                                e.carNumber,
+                                style: TextStyle(
+                                    color: AppColors.green3,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600
+                                ),
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -453,89 +543,5 @@ class HomeCrashListPage extends StatelessWidget {
     );
   }
 
-  Widget crashListPanel(){
-    HomeCrashListController controller = Get.find();
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      width: double.infinity,
-      height: Get.width * 0.5,
-      child: FlutterCarousel(
-        options: CarouselOptions(
-          autoPlay: true,
-          allowImplicitScrolling: true,
-          enlargeCenterPage: false,
-          showIndicator: false,
-          enableInfiniteScroll: true,
-        ),
-        items: controller.crashData.map((e) {
-          return GestureDetector(
-            onTap: () {
-              Get.to(()=> CarDetailPage(id: e.id));
-            },
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)
-              ),
-              elevation: 2,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Material(
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          e.images.first,
-                        ),
-                        fit: BoxFit.cover
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        const Spacer(),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppColors.black.withOpacity(0.8),
-                            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12))
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                e.description,
-                                style: TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600
-                                ),
-                                maxLines: 1,
-                              ),
-                              Text(
-                                e.carNumber,
-                                style: TextStyle(
-                                    color: AppColors.green3,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600
-                                ),
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
 
 }

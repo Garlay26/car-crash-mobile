@@ -6,6 +6,7 @@ import 'package:car_crash_list/utils/number_normalization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/app_colors.dart';
 
@@ -69,6 +70,13 @@ class SaleDetailPage extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              TextButton.icon(
+                  onPressed: () async{
+                    await launchUrl(Uri.parse('tel:${carSales.ownerPhone}'));
+                  },
+                  icon: const Icon(Icons.call_rounded,color: Colors.blue,),
+                  label: Text('Contact : ${carSales.ownerPhone}',style: TextStyle(color: Colors.blue),)
               ),
               if(carSales.images.isNotEmpty)Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),

@@ -52,118 +52,124 @@ class HomeNotiPage extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: double.infinity,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...controller.allData.map((each) {
-                          return GestureDetector(
-                            onTap: () async{
-                              DataController dataController = Get.find();
-                              switch(each.notiType){
-                                case NotiType.news :
-                                  MyDialog().showLoadingDialog();
-                                  final result = await dataController.fetchNewsDetail(id: each.typeId);
-                                  Get.back();
-                                  if(result!=null){
-                                    Get.to(()=> NewsDetailPage(carNews: result));
-                                  }
-                                  break;
-                                case NotiType.crash :
-                                  Get.to(()=> CarDetailPage(id: each.typeId));
-                                  break;
-                                case NotiType.sale :
-                                  MyDialog().showLoadingDialog();
-                                  final result = await dataController.fetchSaleDetail(id: each.typeId);
-                                  Get.back();
-                                  if(result!=null){
-                                    Get.to(()=> SaleDetailPage(carSales: result));
-                                  }
-                                  break;
-                              }
-                              // Get.to(()=> NewsDetailPage(carNews: carNews));
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.9),
-                                  borderRadius: BorderRadius.circular(16)
-                              ),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: Get.width * 0.12,
-                                    child: Hero(
-                                      tag: each.image,
-                                      child: AspectRatio(
-                                        aspectRatio: 1/1,
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                  image: CachedNetworkImageProvider(
-                                                    each.image,
-                                                  ),
-                                                  fit: BoxFit.cover
-                                              )
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                      await controller.onRefresh();
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...controller.allData.map((each) {
+                            return GestureDetector(
+                              onTap: () async{
+                                DataController dataController = Get.find();
+                                switch(each.notiType){
+                                  case NotiType.news :
+                                    MyDialog().showLoadingDialog();
+                                    final result = await dataController.fetchNewsDetail(id: each.typeId);
+                                    Get.back();
+                                    if(result!=null){
+                                      Get.to(()=> NewsDetailPage(carNews: result));
+                                    }
+                                    break;
+                                  case NotiType.crash :
+                                    Get.to(()=> CarDetailPage(id: each.typeId));
+                                    break;
+                                  case NotiType.sale :
+                                    MyDialog().showLoadingDialog();
+                                    final result = await dataController.fetchSaleDetail(id: each.typeId);
+                                    Get.back();
+                                    if(result!=null){
+                                      Get.to(()=> SaleDetailPage(carSales: result));
+                                    }
+                                    break;
+                                }
+                                // Get.to(()=> NewsDetailPage(carNews: carNews));
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.9),
+                                    borderRadius: BorderRadius.circular(16)
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: Get.width * 0.12,
+                                      child: Hero(
+                                        tag: each.image,
+                                        child: AspectRatio(
+                                          aspectRatio: 1/1,
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: CachedNetworkImageProvider(
+                                                      each.image,
+                                                    ),
+                                                    fit: BoxFit.cover
+                                                )
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  10.widthBox(),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          each.title,
-                                          style: TextStyle(
-                                            color: AppColors.black,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
+                                    10.widthBox(),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            each.title,
+                                            style: TextStyle(
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                            ),
+                                            maxLines: 2,
                                           ),
-                                          maxLines: 2,
-                                        ),
-                                        Text(
-                                          each.dateTime.toString().substring(0,16),
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
+                                          Text(
+                                            each.dateTime.toString().substring(0,16),
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                            maxLines: 2,
                                           ),
-                                          maxLines: 2,
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
+                            );
+                          }).toList(),
+                          if(controller.xLoading)Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            alignment: Alignment.center,
+                            child: const CupertinoActivityIndicator(
+                              color: Colors.grey,
                             ),
-                          );
-                        }).toList(),
-                        if(controller.xLoading)Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          alignment: Alignment.center,
-                          child: const CupertinoActivityIndicator(
-                            color: Colors.grey,
                           ),
-                        ),
-                        if(!controller.xLoading && controller.toPageIndex!=null)TextButton(
-                            onPressed: () {
-                              controller.updateData();
-                            },
-                            child: const Text('Load More',style: TextStyle(color: Colors.grey),)
-                        ),
-                        if(controller.toPageIndex==null)TextButton(
-                            onPressed: () {
-                            },
-                            child: const Text('That is all for now !',style: TextStyle(color: Colors.grey),)
-                        ),
-                      ],
+                          if(!controller.xLoading && controller.toPageIndex!=null)TextButton(
+                              onPressed: () {
+                                controller.updateData();
+                              },
+                              child: const Text('Load More',style: TextStyle(color: Colors.grey),)
+                          ),
+                          if(controller.toPageIndex==null)TextButton(
+                              onPressed: () {
+                              },
+                              child: const Text('That is all for now !',style: TextStyle(color: Colors.grey),)
+                          ),
+                          (Get.height).heightBox()
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -41,15 +41,15 @@ class HomeCrashListController extends GetxController{
 
   Future<void> initLoad() async{
     xLoading = true;
+    saleData.clear();
+    newsData.clear();
+    crashData.clear();
+    adsData.clear();
     update();
     try{
-      saleData.clear();
       saleData.addAll(await dataController.fetchSaleData(pageIndex: 1));
-      newsData.clear();
       newsData.addAll(await dataController.fetchNewsData(pageIndex: 1));
-      crashData.clear();
       crashData.addAll(await dataController.fetchCrashData(pageIndex: 1));
-      adsData.clear();
       adsData.addAll(await dataController.fetchAdsData());
     }
     catch(e){

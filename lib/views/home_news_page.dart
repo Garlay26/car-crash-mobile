@@ -42,97 +42,103 @@ class HomeNewsPage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ...controller.allData.map((carNews) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(()=> NewsDetailPage(carNews: carNews));
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.9),
-                                borderRadius: BorderRadius.circular(16)
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        carNews.title,
-                                        style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                    await controller.onRefresh();
+                  },
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...controller.allData.map((carNews) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(()=> NewsDetailPage(carNews: carNews));
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(16)
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          carNews.title,
+                                          style: TextStyle(
+                                            color: AppColors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                          ),
+                                          maxLines: 2,
                                         ),
-                                        maxLines: 2,
-                                      ),
-                                      Text(
-                                        carNews.dateTime.toString().substring(0,16),
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
+                                        Text(
+                                          carNews.dateTime.toString().substring(0,16),
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                          maxLines: 2,
                                         ),
-                                        maxLines: 2,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: Get.width * 0.25,
-                                  child: Hero(
-                                    tag: carNews.image,
-                                    child: AspectRatio(
-                                      aspectRatio: 16/9,
-                                      child: Container(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.vertical(
-                                                top: Radius.circular(16)
-                                            ),
-                                            image: DecorationImage(
-                                                image: CachedNetworkImageProvider(
-                                                  carNews.image,
-                                                ),
-                                                fit: BoxFit.cover
-                                            )
+                                  SizedBox(
+                                    width: Get.width * 0.25,
+                                    child: Hero(
+                                      tag: carNews.image,
+                                      child: AspectRatio(
+                                        aspectRatio: 16/9,
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.vertical(
+                                                  top: Radius.circular(16)
+                                              ),
+                                              image: DecorationImage(
+                                                  image: CachedNetworkImageProvider(
+                                                    carNews.image,
+                                                  ),
+                                                  fit: BoxFit.cover
+                                              )
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
+                          );
+                        }).toList(),
+                        if(controller.xLoading)Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          alignment: Alignment.center,
+                          child: const CupertinoActivityIndicator(
+                            color: Colors.grey,
                           ),
-                        );
-                      }).toList(),
-                      if(controller.xLoading)Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        alignment: Alignment.center,
-                        child: const CupertinoActivityIndicator(
-                          color: Colors.grey,
                         ),
-                      ),
-                      if(!controller.xLoading && controller.toPageIndex!=null)TextButton(
-                          onPressed: () {
-                            controller.updateData();
-                          },
-                          child: const Text('Load More',style: TextStyle(color: Colors.grey),)
-                      ),
-                      if(controller.toPageIndex==null)TextButton(
-                          onPressed: () {
-                          },
-                          child: const Text('That is all for now !',style: TextStyle(color: Colors.grey),)
-                      ),
-                    ],
+                        if(!controller.xLoading && controller.toPageIndex!=null)TextButton(
+                            onPressed: () {
+                              controller.updateData();
+                            },
+                            child: const Text('Load More',style: TextStyle(color: Colors.grey),)
+                        ),
+                        if(controller.toPageIndex==null)TextButton(
+                            onPressed: () {
+                            },
+                            child: const Text('That is all for now !',style: TextStyle(color: Colors.grey),)
+                        ),
+                        (Get.height).heightBox()
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -19,44 +19,46 @@ class NewsDetailPage extends StatelessWidget {
           title: Text(carNews.title),
         ),
         backgroundColor: AppColors.white,
-        body: Column(
-          children: [
-            Hero(
-              tag: carNews.image,
-              child: AspectRatio(
-                aspectRatio: 16/9,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(8)
-                      ),
-                      image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            carNews.image,
-                          ),
-                          fit: BoxFit.cover
-                      )
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Hero(
+                tag: carNews.image,
+                child: AspectRatio(
+                  aspectRatio: 16/9,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(8)
+                        ),
+                        image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              carNews.image,
+                            ),
+                            fit: BoxFit.cover
+                        )
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppConstants.pagePadding,
-                vertical: 12
-              ),
-              child: HtmlWidget(
-                carNews.content,
-                textStyle: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  height: 1.7
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppConstants.pagePadding,
+                  vertical: 12
                 ),
-              ),
-            )
-          ],
+                child: HtmlWidget(
+                  carNews.content,
+                  textStyle: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    height: 1.7
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

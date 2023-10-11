@@ -59,14 +59,7 @@ class CarDetailPage extends StatelessWidget {
               else{
                 return Column(
                   children: [
-                    TextField(
-                      readOnly: true,
-                      controller: TextEditingController(text: controller.carDetail!.description),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: 'Details',
-                      ),
-                    ),
+                    Text(controller.carDetail!.description,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                     10.heightBox(),
                     Expanded(
                       child: ListView.builder(

@@ -47,9 +47,9 @@ class HomeCrashListController extends GetxController{
     adsData.clear();
     update();
     try{
-      saleData.addAll(await dataController.fetchSaleData(pageIndex: 1));
-      newsData.addAll(await dataController.fetchNewsData(pageIndex: 1));
-      crashData.addAll(await dataController.fetchCrashData(pageIndex: 1));
+      saleData.addAll(await fetchRecommendedSaleList());
+      newsData.addAll(await fetchRecommendedNewsList());
+      crashData.addAll(await fetchRecommendedCrashList());
       adsData.addAll(await dataController.fetchAdsData());
     }
     catch(e){
@@ -58,6 +58,63 @@ class HomeCrashListController extends GetxController{
     }
     xLoading = false;
     update();
+  }
+
+  Future<List<CarSales>> fetchRecommendedSaleList() async{
+    List<CarSales> result = [];
+    try{
+      var response = await ApiServices().apiGetCall(
+        endPoint: ApiEndPoints.recommendedSaleList,
+      );
+      if(response!.isOk){
+        Iterable rawList = response.body['body']['data'];
+        for(final each in rawList){
+          result.add(CarSales.fromMap(data: each));
+        }
+      }
+    }
+    catch(e){
+      null;
+    }
+    return result;
+  }
+
+  Future<List<CarDetail>> fetchRecommendedCrashList() async{
+    List<CarDetail> result = [];
+    try{
+      var response = await ApiServices().apiGetCall(
+        endPoint: ApiEndPoints.recommendedCrashList,
+      );
+      if(response!.isOk){
+        Iterable rawList = response.body['body']['data'];
+        for(final each in rawList){
+          result.add(CarDetail.fromMap(data: each));
+        }
+      }
+    }
+    catch(e){
+      null;
+    }
+    return result;
+  }
+
+  Future<List<CarNews>> fetchRecommendedNewsList() async{
+    List<CarNews> result = [];
+    try{
+      var response = await ApiServices().apiGetCall(
+        endPoint: ApiEndPoints.recommendedNewsList,
+      );
+      if(response!.isOk){
+        Iterable rawList = response.body['body']['data'];
+        for(final each in rawList){
+          result.add(CarNews.fromMap(data: each));
+        }
+      }
+    }
+    catch(e){
+      null;
+    }
+    return result;
   }
 
 

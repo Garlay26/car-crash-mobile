@@ -18,7 +18,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class ApiServices {
-  String baseUrl = 'http://car.thahtaykyike.com/api/';
+  String baseUrl = 'http://cclist4mm.xyz/api/';
   DataController dataController = Get.find();
   // String baseUrl = '${baseDomainUrl}api/v1/';
 
@@ -224,5 +224,12 @@ class ApiEndPoints {
   static const String crashList = "crash-list";
   static const String adsList = "advertising-list";
   static const String notiList = "noti";
+
+  static const String recommendedSaleList = "recommended-sale-list";
+  static const String recommendedNewsList = "recommended-new-list";
+  static const String recommendedCrashList = "recommended-crash-list";
+
+
   static const String shareMessage = "https://raw.githubusercontent.com/ChawThida/tolimotesa/main/carCrashListShare.json";
+
 }

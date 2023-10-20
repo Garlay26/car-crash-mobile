@@ -4,6 +4,7 @@ import 'package:car_crash_list/controllers/home_news_controller.dart';
 import 'package:car_crash_list/controllers/home_noti_controller.dart';
 import 'package:car_crash_list/models/car_news.dart';
 import 'package:car_crash_list/models/noti_model.dart';
+import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
@@ -63,6 +64,7 @@ class HomeNotiPage extends StatelessWidget {
                             return GestureDetector(
                               onTap: () async{
                                 DataController dataController = Get.find();
+                                AdsServices().showInterAds();
                                 switch(each.notiType){
                                   case NotiType.news :
                                     MyDialog().showLoadingDialog();

@@ -7,15 +7,13 @@ import 'package:car_crash_list/models/car_sales.dart';
 import 'package:car_crash_list/services/api_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_images.dart';
-import 'package:car_crash_list/utils/custom_dialog.dart';
 import 'package:car_crash_list/utils/extensions.dart';
 import 'package:car_crash_list/views/car_detail_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
 
-import '../models/sale_detail.dart';
+import '../utils/custom_dialog.dart';
 
 class HomeCrashListController extends GetxController{
 
@@ -56,8 +54,12 @@ class HomeCrashListController extends GetxController{
       superPrint(e);
       null;
     }
+    setAds();
     xLoading = false;
     update();
+  }
+
+  void setAds(){
   }
 
   Future<List<CarSales>> fetchRecommendedSaleList() async{
@@ -147,7 +149,7 @@ class HomeCrashListController extends GetxController{
       },
       onFailure: (data) {
         Get.dialog(
-            Dialog(
+            const Dialog(
               backgroundColor: Colors.transparent,
               child: CarFoundDialog(id: ''),
             )

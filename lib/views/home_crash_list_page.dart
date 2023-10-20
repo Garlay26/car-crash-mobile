@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/controllers/home_crash_list_controller.dart';
+import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/app_images.dart';
@@ -237,7 +238,16 @@ class HomeCrashListPage extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  controller.onClickSearch();
+                  try{
+                    AdsServices().showRewardAds(
+                      onUserEarnReward: () {
+                        controller.onClickSearch();
+                      },
+                    );
+                  }
+                  catch(e){
+                    controller.onClickSearch();
+                  }
                 },
                 icon: const Icon(Icons.search_rounded)
             )
@@ -263,7 +273,8 @@ class HomeCrashListPage extends StatelessWidget {
         ),
         items: controller.crashData.map((e) {
           return GestureDetector(
-            onTap: () {
+            onTap: () async{
+              AdsServices().showInterAds();
               Get.to(()=> CarDetailPage(id: e.id));
             },
             child: Card(
@@ -349,6 +360,7 @@ class HomeCrashListPage extends StatelessWidget {
         items: controller.saleData.map((e) {
           return GestureDetector(
             onTap: () {
+              AdsServices().showInterAds();
               Get.to(()=> SaleDetailPage(carSales: e));
             },
             child: Card(
@@ -435,6 +447,7 @@ class HomeCrashListPage extends StatelessWidget {
         items: controller.newsData.map((e) {
           return GestureDetector(
             onTap: () {
+              AdsServices().showInterAds();
               Get.to(()=> NewsDetailPage(carNews: e));
             },
             child: Card(
@@ -511,6 +524,7 @@ class HomeCrashListPage extends StatelessWidget {
         items: controller.adsData.map((e) {
           return GestureDetector(
             onTap: () {
+              AdsServices().showInterAds();
               launchUrlString(e.link);
             },
             child: Card(

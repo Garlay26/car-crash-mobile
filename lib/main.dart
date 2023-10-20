@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async{
   Get.put(DataController());
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Future.delayed(const Duration(seconds: 1));
   if(Platform.isAndroid){
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);

@@ -26,7 +26,6 @@ class CarSales{
   });
 
   factory CarSales.fromMap({required Map<String,dynamic> data}){
-    superPrint(data);
     return CarSales(
       id: data['id'].toString(),
       title: data['title'].toString(),

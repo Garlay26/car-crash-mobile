@@ -1,13 +1,16 @@
+import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
+import 'package:car_crash_list/utils/custom_dialog.dart';
 import 'package:car_crash_list/views/home_crash_list_page.dart';
 import 'package:car_crash_list/views/home_news_page.dart';
 import 'package:car_crash_list/views/home_noti_page.dart';
 import 'package:car_crash_list/views/home_sales_page.dart';
 import 'package:car_crash_list/views/home_more_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/state_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../utils/app_constants.dart';
 
 enum HomeTabs{
   home,
@@ -29,6 +32,11 @@ class _HomeMainPageState extends State<HomeMainPage> {
   PageController pageController = PageController();
   Rx<HomeTabs> currentTab = HomeTabs.home.obs;
 
+  BannerAd? _bannerAd;
+  // AdmobInterstitial? admobInterstitial;
+  // AdmobReward? admobReward;
+
+
   @override
   void initState() {
     initLoad();
@@ -36,7 +44,6 @@ class _HomeMainPageState extends State<HomeMainPage> {
   }
 
   Future<void> initLoad() async{
-
     currentTab.listen((p0) {
       switch(p0){
         case HomeTabs.home : {
@@ -56,7 +63,20 @@ class _HomeMainPageState extends State<HomeMainPage> {
         };break;
       }
     });
-
+    _bannerAd = BannerAd(
+      adUnitId: AppConstants.adMobBannerId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          superPrint('banner loaded');
+        },
+        onAdFailedToLoad: (ad, err) {
+          superPrint('banner error $err');
+          ad.dispose();
+        },
+      ),
+    )..load();
   }
 
   @override
@@ -66,6 +86,11 @@ class _HomeMainPageState extends State<HomeMainPage> {
       body: Column(
         children: [
           Expanded(child: shownPagePanel()),
+          SizedBox(
+            width: _bannerAd!.size.width.toDouble(),
+            height: _bannerAd!.size.height.toDouble(),
+            child: AdWidget(ad: _bannerAd!),
+          ),
         ],
       ),
       bottomNavigationBar: Obx(

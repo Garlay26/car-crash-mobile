@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:car_crash_list/controllers/home_news_controller.dart';
 import 'package:car_crash_list/models/car_news.dart';
+import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/extensions.dart';
@@ -44,14 +45,17 @@ class HomeNewsPage extends StatelessWidget {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async{
-                    await controller.onRefresh();
-                  },
+                    AdsServices().showRewardAds(onUserEarnReward: () {
+                      controller.onRefresh();
+                    },);
+                    },
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         ...controller.allData.map((carNews) {
                           return GestureDetector(
                             onTap: () {
+                              AdsServices().showInterAds();
                               Get.to(()=> NewsDetailPage(carNews: carNews));
                             },
                             child: Container(

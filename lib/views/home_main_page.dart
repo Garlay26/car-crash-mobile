@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
@@ -35,6 +36,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
   BannerAd? _bannerAd;
   // AdmobInterstitial? admobInterstitial;
   // AdmobReward? admobReward;
+  Rx<bool> xLoaded = false.obs;
 
 
   @override
@@ -63,6 +65,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
         };break;
       }
     });
+    final status = await AppTrackingTransparency.requestTrackingAuthorization();
     _bannerAd = BannerAd(
       adUnitId: AppConstants.adMobBannerId,
       request: const AdRequest(),
@@ -77,21 +80,24 @@ class _HomeMainPageState extends State<HomeMainPage> {
         },
       ),
     )..load();
+    xLoaded.value = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Expanded(child: shownPagePanel()),
-          SizedBox(
-            width: _bannerAd!.size.width.toDouble(),
-            height: _bannerAd!.size.height.toDouble(),
-            child: AdWidget(ad: _bannerAd!),
-          ),
-        ],
+      body: Obx(
+          ()=> !xLoaded.value?Container():Column(
+          children: [
+            Expanded(child: shownPagePanel()),
+            if(_bannerAd!=null)SizedBox(
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Obx(
           ()=> BottomNavigationBar(

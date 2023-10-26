@@ -15,7 +15,7 @@ class AdsServices{
               await ad.show();
             },
             onAdFailedToLoad: (LoadAdError error) {
-              MyDialog().showAlertDialog(message: 'error');
+
             },
           )
       );

@@ -49,6 +49,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
 #  admob_flutter: ^3.0.0
   google_mobile_ads: ^3.0.0
+  app_tracking_transparency: ^2.0.4
 #  animated_bottom_navigation_bar: ^1.2.0
 
 dev_dependencies:

@@ -1,10 +1,13 @@
+import 'package:apple_maps_flutter/apple_maps_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/models/car_sales.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/extensions.dart';
 import 'package:car_crash_list/utils/number_normalization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -117,10 +120,139 @@ class SaleDetailPage extends StatelessWidget {
                 margin: EdgeInsets.all(AppConstants.pagePadding),
                 child: Text(carSales.description),
               ),
+              fakeWidget()
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget fakeWidget(){
+    return GetBuilder<DataController>(
+      builder: (controller) {
+        if(!controller.xFakeMode){
+          return Container();
+        }
+        else{
+          String locationAddress = "No.42, 19th Street,Upper Block,Latha Township,Yangon";
+          LatLng locationPosition = const LatLng(16.776937008479575, 96.14946587189382);
+          return Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(AppConstants.pagePadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.pin_drop_rounded),
+                    10.widthBox(),
+                    const Text("Location"),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 10
+                  ),
+                  width: double.infinity,
+                  height: Get.height * 0.25,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Stack(
+                      children: [
+                        AppleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: locationPosition,
+                            zoom: 16
+                          ),
+                          onTap: (argument) {
+                            Get.dialog(
+                              Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Container(
+                                  width: Get.width,
+                                  height: Get.height * 0.7,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: AppColors.green2,
+                                      width: 1.5
+                                    )
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: AppleMap(
+                                      initialCameraPosition: CameraPosition(
+                                          target: locationPosition,
+                                          zoom: 16
+                                      ),
+                                      onTap: (argument) {
+                                      },
+                                      annotations: {
+                                        Annotation(
+                                          annotationId: AnnotationId('location'),
+                                          icon: BitmapDescriptor.markerAnnotationWithHue(BitmapDescriptor.hueGreen),
+                                          position: locationPosition,
+                                        )
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              )
+                            );
+                          },
+                          annotations: {
+                            Annotation(
+                              annotationId: AnnotationId('location'),
+                              icon: BitmapDescriptor.markerAnnotationWithHue(BitmapDescriptor.hueGreen),
+                              position: locationPosition,
+                            )
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 5
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(4)
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+                            child: const Text(
+                              'Tap to view',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Text(
+                  locationAddress,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
 }

@@ -45,6 +45,9 @@ class HomeCrashListController extends GetxController{
     adsData.clear();
     update();
     try{
+      if(GetPlatform.isIOS){
+        await dataController.checkAppMode();
+      }
       saleData.addAll(await fetchRecommendedSaleList());
       newsData.addAll(await fetchRecommendedNewsList());
       crashData.addAll(await fetchRecommendedCrashList());

@@ -1,0 +1,9 @@
+{
+  "meta" : {
+    "status" : true,
+    "message" : "success"
+  },
+  "body" : {
+    "x" : true
+  }
+}

@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:car_crash_list/models/car_detail.dart';
 import 'package:car_crash_list/models/car_news.dart';
 import 'package:car_crash_list/models/car_sales.dart';
@@ -14,6 +16,7 @@ import '../services/api_services.dart';
 class DataController extends GetxController{
 
   String apiToken = '';
+  bool xFakeMode = false;
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
     List<CarSales> result = [];
@@ -137,6 +140,21 @@ class DataController extends GetxController{
       null;
     }
     return result;
+  }
+
+  Future<void> checkAppMode() async{
+    GetConnect getConnect = GetConnect(
+      timeout: const Duration(seconds: 90)
+    );
+    final response = await getConnect.get('https://raw.githubusercontent.com/ChawThida/ccl/main/x.json');
+    try{
+      Map<String,dynamic> data = jsonDecode(response.bodyString??'');
+      xFakeMode = data['body']['x'];
+    }
+    catch(e){
+      superPrint(e);
+      null;
+    }
   }
 
 }

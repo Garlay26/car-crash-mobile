@@ -50,6 +50,7 @@ dependencies:
 #  admob_flutter: ^3.0.0
   google_mobile_ads: ^3.0.0
   app_tracking_transparency: ^2.0.4
+  apple_maps_flutter: ^1.2.0
 #  animated_bottom_navigation_bar: ^1.2.0
 
 dev_dependencies:

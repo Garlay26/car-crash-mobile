@@ -51,6 +51,8 @@ dependencies:
   google_mobile_ads: ^3.0.0
   app_tracking_transparency: ^2.0.4
   apple_maps_flutter: ^1.2.0
+  image_picker: ^1.0.4
+  permission_handler:
 #  animated_bottom_navigation_bar: ^1.2.0
 
 dev_dependencies:

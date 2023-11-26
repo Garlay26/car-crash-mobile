@@ -150,6 +150,7 @@ class DataController extends GetxController{
     try{
       Map<String,dynamic> data = jsonDecode(response.bodyString??'');
       xFakeMode = data['body']['x'];
+      update();
     }
     catch(e){
       superPrint(e);

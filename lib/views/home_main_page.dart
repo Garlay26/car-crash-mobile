@@ -1,4 +1,5 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
@@ -7,8 +8,10 @@ import 'package:car_crash_list/views/home_news_page.dart';
 import 'package:car_crash_list/views/home_noti_page.dart';
 import 'package:car_crash_list/views/home_sales_page.dart';
 import 'package:car_crash_list/views/home_more_page.dart';
+import 'package:car_crash_list/views/report_new_crash/report_new_crash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../utils/app_constants.dart';
@@ -85,79 +88,98 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Obx(
-          ()=> !xLoaded.value?Container():Column(
-          children: [
-            Expanded(child: shownPagePanel()),
-            if(_bannerAd!=null)SizedBox(
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Obx(
-          ()=> BottomNavigationBar(
-            currentIndex: HomeTabs.values.indexOf(currentTab.value),
-            onTap: (value) {
-              currentTab.value = HomeTabs.values[value];
-            },
-            elevation: 10,
-            selectedItemColor: AppColors.green1,
-            unselectedItemColor: AppColors.black.withOpacity(0.5),
-            items: HomeTabs.values.map((e) {
-              IconData icon = Icons.home_rounded;
-              String title = '';
-              switch(e){
-                case HomeTabs.home :
-                  icon = Icons.home_rounded;
-                  title = 'Home';
-                  break;
-                case HomeTabs.sale :
-                  icon = Icons.attach_money_rounded;
-                  title = 'Sale';
-                  break;
-                case HomeTabs.news :
-                  icon = Icons.newspaper_rounded;
-                  title = 'News';
-                  break;
-                case HomeTabs.notification :
-                  icon = Icons.notifications_active_rounded;
-                  title = 'Noti';
-                  break;
-                case HomeTabs.more :
-                  icon = Icons.more_horiz_rounded;
-                  title = 'More';
-                  break;
-              }
-
-              bool xSelected = e == currentTab.value;
-
-              return BottomNavigationBarItem(
-                icon: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Icon(icon),
-                    if(e == HomeTabs.notification)Transform.translate(
-                      offset: const Offset(10,-10),
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red
-                        ),
-                        alignment: Alignment.center,
-                      ),
-                    )
-                  ],
-                ),
-                label: title,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        floatingActionButton: GetBuilder<DataController>(
+          builder: (dataController) {
+            if(dataController.xFakeMode){
+              return FloatingActionButton.extended(
+                  onPressed: () {
+                    Get.to(()=> const ReportNewCrashPage());
+                  },
+                  backgroundColor: AppColors.green1,
+                  label: const Text("Report new crash!")
               );
-            }).toList(),
+            }
+            else{
+              return Container();
+            }
+          }
+        ),
+        body: Obx(
+            ()=> !xLoaded.value?Container():Column(
+            children: [
+              Expanded(child: shownPagePanel()),
+              if(_bannerAd!=null)SizedBox(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
+              ),
+            ],
           ),
+        ),
+        bottomNavigationBar: Obx(
+            ()=> BottomNavigationBar(
+              currentIndex: HomeTabs.values.indexOf(currentTab.value),
+              onTap: (value) {
+                currentTab.value = HomeTabs.values[value];
+              },
+              elevation: 10,
+              selectedItemColor: AppColors.green1,
+              unselectedItemColor: AppColors.black.withOpacity(0.5),
+              items: HomeTabs.values.map((e) {
+                IconData icon = Icons.home_rounded;
+                String title = '';
+                switch(e){
+                  case HomeTabs.home :
+                    icon = Icons.home_rounded;
+                    title = 'Home';
+                    break;
+                  case HomeTabs.sale :
+                    icon = Icons.attach_money_rounded;
+                    title = 'Sale';
+                    break;
+                  case HomeTabs.news :
+                    icon = Icons.newspaper_rounded;
+                    title = 'News';
+                    break;
+                  case HomeTabs.notification :
+                    icon = Icons.notifications_active_rounded;
+                    title = 'Noti';
+                    break;
+                  case HomeTabs.more :
+                    icon = Icons.more_horiz_rounded;
+                    title = 'More';
+                    break;
+                }
+
+                bool xSelected = e == currentTab.value;
+
+                return BottomNavigationBarItem(
+                  icon: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(icon),
+                      if(e == HomeTabs.notification)Transform.translate(
+                        offset: const Offset(10,-10),
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red
+                          ),
+                          alignment: Alignment.center,
+                        ),
+                      )
+                    ],
+                  ),
+                  label: title,
+                );
+              }).toList(),
+            ),
+        ),
       ),
     );
   }

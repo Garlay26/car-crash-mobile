@@ -39,6 +39,12 @@
 	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>To Upload Crash Photos Report</string>
+    <key>NSCameraUsageDescription</key>
+    <string>To Upload Crash Photos Report</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>To Upload Crash Videos Report</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

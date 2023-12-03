@@ -4,6 +4,7 @@ import 'package:car_crash_list/services/ads_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
 import 'package:car_crash_list/views/home_crash_list_page.dart';
+import 'package:car_crash_list/views/home_map_page.dart';
 import 'package:car_crash_list/views/home_news_page.dart';
 import 'package:car_crash_list/views/home_noti_page.dart';
 import 'package:car_crash_list/views/home_sales_page.dart';
@@ -12,7 +13,6 @@ import 'package:car_crash_list/views/report_new_crash/report_new_crash_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../utils/app_constants.dart';
 
@@ -21,6 +21,7 @@ enum HomeTabs{
   news,
   sale,
   notification,
+  map,
   more
 }
 
@@ -53,19 +54,22 @@ class _HomeMainPageState extends State<HomeMainPage> {
       switch(p0){
         case HomeTabs.home : {
           pageController.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.linear);
-        };break;
+        } {}break;
         case HomeTabs.news : {
           pageController.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear);
-        };break;
+        } {}break;
         case HomeTabs.sale : {
           pageController.animateToPage(2, duration: const Duration(milliseconds: 250), curve: Curves.linear);
-        };break;
+        } {}break;
         case HomeTabs.notification : {
           pageController.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear);
-        };break;
-        case HomeTabs.more : {
+        } {}break;
+        case HomeTabs.map : {
           pageController.animateToPage(4, duration: const Duration(milliseconds: 250), curve: Curves.linear);
-        };break;
+        } {}break;
+        case HomeTabs.more : {
+          pageController.animateToPage(5, duration: const Duration(milliseconds: 250), curve: Curves.linear);
+        } {}break;
       }
     });
     final status = await AppTrackingTransparency.requestTrackingAuthorization();
@@ -112,11 +116,25 @@ class _HomeMainPageState extends State<HomeMainPage> {
             ()=> !xLoaded.value?Container():Column(
             children: [
               Expanded(child: shownPagePanel()),
-              if(_bannerAd!=null)SizedBox(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
+              GetBuilder<DataController>(
+                builder: (dataController) {
+                  if(dataController.xFakeMode){
+                    return Container();
+                  }
+                  else{
+                    if(_bannerAd!=null){
+                      return SizedBox(
+                        width: _bannerAd!.size.width.toDouble(),
+                        height: _bannerAd!.size.height.toDouble(),
+                        child: AdWidget(ad: _bannerAd!),
+                      );
+                    }
+                    else{
+                      return Container();
+                    }
+                  }
+                },
+              )
             ],
           ),
         ),
@@ -148,6 +166,10 @@ class _HomeMainPageState extends State<HomeMainPage> {
                   case HomeTabs.notification :
                     icon = Icons.notifications_active_rounded;
                     title = 'Noti';
+                    break;
+                  case HomeTabs.map :
+                    icon = Icons.map;
+                    title = 'Map';
                     break;
                   case HomeTabs.more :
                     icon = Icons.more_horiz_rounded;
@@ -193,6 +215,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
         HomeNewsPage(),
         HomeSalesPage(),
         HomeNotiPage(),
+        HomeMapPage(),
         HomeMorePage()
       ],
     );

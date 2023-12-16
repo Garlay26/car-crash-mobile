@@ -149,6 +149,7 @@ class DataController extends GetxController{
     final response = await getConnect.get('https://raw.githubusercontent.com/ChawThida/ccl/main/x.json');
     try{
       Map<String,dynamic> data = jsonDecode(response.bodyString??'');
+      superPrint(data);
       xFakeMode = data['body']['x'];
       update();
     }

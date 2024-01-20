@@ -38,6 +38,7 @@ dependencies:
   get:
   http:
   google_fonts:
+  shared_preferences:
   cached_network_image:
   flutter_super_scaffold:
   flutter_carousel_widget: ^2.1.0

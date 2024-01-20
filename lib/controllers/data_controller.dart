@@ -16,7 +16,7 @@ import '../services/api_services.dart';
 class DataController extends GetxController{
 
   String apiToken = '';
-  bool xFakeMode = false;
+  bool xFakeMode = true;
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
     List<CarSales> result = [];
@@ -142,21 +142,21 @@ class DataController extends GetxController{
     return result;
   }
 
-  Future<void> checkAppMode() async{
-    GetConnect getConnect = GetConnect(
-      timeout: const Duration(seconds: 90)
-    );
-    final response = await getConnect.get('https://raw.githubusercontent.com/ChawThida/ccl/main/x.json');
-    try{
-      Map<String,dynamic> data = jsonDecode(response.bodyString??'');
-      superPrint(data);
-      xFakeMode = data['body']['x'];
-      update();
-    }
-    catch(e){
-      superPrint(e);
-      null;
-    }
-  }
+  // Future<void> checkAppMode() async{
+  //   GetConnect getConnect = GetConnect(
+  //     timeout: const Duration(seconds: 90)
+  //   );
+  //   final response = await getConnect.get('https://raw.githubusercontent.com/ChawThida/ccl/main/x.json');
+  //   try{
+  //     Map<String,dynamic> data = jsonDecode(response.bodyString??'');
+  //     superPrint(data);
+  //     xFakeMode = data['body']['x'];
+  //     update();
+  //   }
+  //   catch(e){
+  //     superPrint(e);
+  //     null;
+  //   }
+  // }
 
 }

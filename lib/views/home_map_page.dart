@@ -1,7 +1,9 @@
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
+import 'package:car_crash_list/services/api_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
@@ -12,9 +14,44 @@ import 'package:get/get.dart';
 
 enum MapDummyTypes{
   gasStation,
-  egg,
+  suddenCheck,
   trafficLightOff,
   populated,
+}
+
+class MapDataModel{
+
+  String id;
+  LatLng latLng;
+  MapDummyTypes mapDummyTypes;
+
+  MapDataModel({
+    required this.id,
+    required this.latLng,
+    required this.mapDummyTypes
+  });
+
+  factory MapDataModel.fromMap({required Map<String,dynamic> data}){
+
+    MapDummyTypes mapDummyTypes = MapDummyTypes.gasStation;
+
+    try{
+      mapDummyTypes = MapDummyTypes.values.where((element) => element.name == data['type'].toString()).first;
+    }
+    catch(e){
+      null;
+    }
+
+    return MapDataModel(
+      id: data['id'].toString(),
+      latLng: LatLng(
+        double.tryParse(data['lat'].toString())??0,
+        double.tryParse(data['lng'].toString())??0,
+      ),
+      mapDummyTypes: mapDummyTypes
+    );
+  }
+
 }
 
 
@@ -29,27 +66,11 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   Rx<LatLng> currentLatLng = const LatLng(16.81733643778101, 96.15592077737314).obs;
   Rx<DateTime> lastUpdatedAt = DateTime.now().obs;
-  Rx<List<LatLng>> dummyPoints = Rx<List<LatLng>>([
-    const LatLng(16.81733643778101, 96.15592077737314),
-    const LatLng(16.81133643778101, 96.1253207737314),
-    const LatLng(16.78230079615058, 96.1621419422612),
-    const LatLng(16.792935389216716, 96.14299195120026),
-    const LatLng(16.830399258372026, 96.12954049524836),
-    const LatLng(16.830233789601124, 96.17535117748247),
-    const LatLng(16.846862382902135, 96.1826117382106),
-    const LatLng(16.85190858497779, 96.12383576909286),
-    const LatLng(16.851081345849657, 96.15918778765666),
-    const LatLng(16.77959446110062, 96.1964413763738),
-    const LatLng(16.80367465085251, 96.19929373951697),
-    const LatLng(16.786876767501063, 96.14293795994638),
-    const LatLng(16.79060056500469, 96.1282439666777),
-    const LatLng(16.836438659408927, 96.15840987043578),
-    const LatLng(16.841154224475208, 96.19592276489323),
-    const LatLng(16.850915900619324, 96.18122877558136),
-    const LatLng(16.804253864305643, 96.17630196651584),
-    const LatLng(16.790931564430714, 96.13446730444468),
+  Rx<List<MapDataModel>> dummyPoints = Rx<List<MapDataModel>>([
+
   ]);
   Rx<MapDummyTypes> currentType = MapDummyTypes.trafficLightOff.obs;
+  Timer? timer;
 
   @override
   void initState() {
@@ -59,13 +80,88 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    if(timer!=null){
+      timer!.cancel();
+    }
     super.dispose();
   }
 
   Future<void> initLoad() async{
+    updateMapData();
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) async{
+      updateMapData();
+    });
+  }
+
+  Future<void> updateMapData() async{
+    try{
+      dummyPoints.value.clear();
+      final response = await ApiServices().apiGetCall(endPoint: ApiEndPoints.mapDataList,xNeedToken: true);
+      superPrint(response!.body);
+      Iterable iterable = response!.body['body'];
+      for (var value in iterable) {
+        dummyPoints.value.add(MapDataModel.fromMap(data: value));
+      }
+      dummyPoints.refresh();
+    }
+    catch(e){
+      superPrint(e);
+      null;
+    }
+  }
+
+
+  Future<void> reportNow({
+    required String lat,
+    required String lng,
+    required MapDummyTypes mapDummyTypes
+  }) async{
+
+    MyDialog().showLoadingDialog();
+    Response? apiResponse;
+    try{
+      apiResponse = await ApiServices().apiPostCall(
+          endPoint: ApiEndPoints.reportMapData,
+          data: {
+            "lat" : lat,
+            "lng" : lng,
+            "type" : mapDummyTypes.name,
+          },
+          xNeedToken: true
+      );
+    }
+    catch(e){
+      superPrint(e);
+      null;
+    }
+    superPrint({
+      "lat" : lat,
+      "lng" : lng,
+      "type" : mapDummyTypes.name,
+    });
+    superPrint(apiResponse!.body);
+    Get.back(canPop: false);
+
+    try{
+      if(apiResponse==null){
+        MyDialog().showAlertDialog(message: 'Something went wrong!');
+      }
+      else{
+        if(apiResponse.body["meta"]["status"]){
+          Get.back(canPop: false);
+          MyDialog().showAlertDialog(message: 'Your report has been sent! After we review them, it will be on the list soon.Thanks!!!');
+        }
+        else{
+          MyDialog().showAlertDialog(message: apiResponse.body["meta"]["message"].toString());
+        }
+      }
+    }
+    catch(e){
+      MyDialog().showAlertDialog(message: 'Something went wrong!');
+    }
 
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +189,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
                           () {
                             Color fillColor = Colors.white.withOpacity(0.5);
                             switch(currentType.value){
-                              case MapDummyTypes.egg:
+                              case MapDummyTypes.suddenCheck:
                                 fillColor = Colors.white.withOpacity(0.5);
                                 break;
                               case MapDummyTypes.gasStation:
@@ -163,11 +259,11 @@ class _HomeMapPageState extends State<HomeMapPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: () async{
-                                      MyDialog().showLoadingDialog();
-                                      await Future.delayed(const Duration(seconds: 3));
-                                      Get.back();
-                                      Get.back();
-                                      MyDialog().showAlertDialog(message: 'Your report has been sent! After we review them, it will be on the list soon.Thanks!!!');
+                                      reportNow(
+                                          lat: argument.latitude.toString(),
+                                          lng: argument.longitude.toString(),
+                                          mapDummyTypes: currentType.value
+                                      );
                                     },
                                     child: const Text('Report Now'),
                                   ),
@@ -180,12 +276,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
                     )
                   );
                 },
-                circles: dummyPoints.value.map((eachLocation) {
-                  int rnd = Random().nextInt(MapDummyTypes.values.length);
-                  MapDummyTypes type = MapDummyTypes.values[rnd];
+                circles: dummyPoints.value.map((eachData) {
                   Color fillColor = Colors.redAccent.withOpacity(0.5);
-                  switch(type){
-                    case MapDummyTypes.egg:
+                  switch(eachData.mapDummyTypes){
+                    case MapDummyTypes.suddenCheck:
                       fillColor = Colors.white.withOpacity(0.5);
                       break;
                     case MapDummyTypes.gasStation:
@@ -199,8 +293,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
                       break;
                   }
                   return Circle(
-                    circleId: CircleId(eachLocation.toString()),
-                    center: eachLocation,
+                    circleId: CircleId(eachData.id),
+                    center: eachData.latLng,
                     radius: 150,
                     strokeWidth: 1,
                     fillColor: fillColor,
@@ -221,11 +315,10 @@ class _HomeMapPageState extends State<HomeMapPage> {
                   children: MapDummyTypes.values.map((type) {
                     String label = '';
                     Color fillColor = Colors.redAccent;
-
                     switch(type){
-                      case MapDummyTypes.egg:
+                      case MapDummyTypes.suddenCheck:
                         fillColor = Colors.white.withOpacity(0.5);
-                        label = 'Egg';
+                        label = 'Sudden Check';
                         break;
                       case MapDummyTypes.gasStation:
                         fillColor = Colors.greenAccent.withOpacity(0.5);

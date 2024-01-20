@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
+import 'package:car_crash_list/views/auth/login/v_login_page.dart';
+import 'package:car_crash_list/views/auth/profile/profile_controller.dart';
 import 'package:car_crash_list/views/home_main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -11,6 +13,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async{
   Get.put(DataController());
+  Get.put(ProfileController());
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Future.delayed(const Duration(seconds: 1));
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    TextStyle defaultTextStyle = GoogleFonts.poppins(
+    TextStyle defaultTextStyle = GoogleFonts.nunito(
       color: AppColors.black,
       fontSize: 14,
       fontWeight: FontWeight.w600
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
             titleSmall: defaultTextStyle,
           )
       ),
-      home: const HomeMainPage(),
+      home: const LoginPage(),
     );
   }
 }

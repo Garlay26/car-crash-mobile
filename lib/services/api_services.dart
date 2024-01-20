@@ -156,8 +156,8 @@ class ApiServices {
 
   Future<Response?> apiPostCall(
       {required String endPoint,
-      bool xNeedToken = false,
-      required var data}) async {
+        bool xNeedToken = false,
+        required var data}) async {
     http.Response? response;
 
     try {
@@ -176,6 +176,7 @@ class ApiServices {
 
     return responseConverter(response: response);
   }
+
 
   // Future<Response?> apiFormDataCall(
   //     {required String endPoint,
@@ -231,5 +232,13 @@ class ApiEndPoints {
 
 
   static const String shareMessage = "https://raw.githubusercontent.com/ChawThida/tolimotesa/main/carCrashListShare.json";
+
+  static const String register = "register";
+  static const String login = "login";
+  static const String reportCrash = "report-crash";
+  static const String mapDataList = "map-data/list";
+  static const String reportMapData = "map-data/create";
+  static const String accountDelete = "delete_user";
+
 
 }

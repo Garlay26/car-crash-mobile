@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
+import 'package:car_crash_list/services/api_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/utils/app_constants.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
@@ -76,9 +78,27 @@ class _ReportNewCrashPageState extends State<ReportNewCrashPage> {
     }
     else{
       MyDialog().showLoadingDialog();
-      await Future.delayed(const Duration(seconds: 5));
-      Get.back();
-      Get.back();
+      Response? response;
+      try{
+        response = await ApiServices().apiPostCall(
+          endPoint: ApiEndPoints.reportCrash,
+          data: {
+            "carName" : txtCarName.text,
+            "location" : txtLocation.text,
+            "title" : txtTitle.text,
+            "discription" : txtDescription.text,
+            "images" : photos.value.map((each) async{
+              return (base64Encode(File(each).readAsBytesSync())).toString();
+            }).toList()
+          },
+          xNeedToken: true
+        );
+      }
+      catch(e){
+        null;
+      }
+      Get.back(canPop: false);
+      Get.back(canPop: false);
       MyDialog().showAlertDialog(message: 'The crash has been reported successfully!. It will be on the list after we review them.Thank you!');
     }
 

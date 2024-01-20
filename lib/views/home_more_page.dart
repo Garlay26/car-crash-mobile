@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:car_crash_list/services/api_services.dart';
 import 'package:car_crash_list/utils/custom_dialog.dart';
+import 'package:car_crash_list/views/auth/login/v_login_page.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
@@ -89,10 +90,55 @@ class HomeMorePage extends StatelessWidget {
                   message = body['message'].toString();
                 }
                 Share.share(
-                  "$message\nDownload Link : $appLink"
+                    "$message\nDownload Link : $appLink"
                 );
               }, child: const Text('Share Now')),
-            )
+            ),
+            10.heightBox(),
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ElevatedButton(onPressed: () async{
+                MyDialog().showLoadingDialog();
+                Response? response;
+                String appLink = '-';
+                String message = 'Car Crash Mobile Application';
+                try{
+                  response = await ApiServices().apiPostCall(
+                      endPoint: ApiEndPoints.accountDelete,
+                      xNeedToken: true,
+                      data: {
+
+                      }
+                  );
+                }
+                catch(e){
+                  null;
+                }
+                Get.back();
+                if(response!=null){
+                  Get.offAll(()=> const LoginPage());
+                  MyDialog().showAlertDialog(message: "Account has been deleted successfully!");
+                }
+              },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red
+                  ),
+                  child: const Text('Delete Account')),
+            ),
+            10.heightBox(),
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ElevatedButton(onPressed: () async{
+                Get.offAll(()=> const LoginPage());
+              },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey
+                  ),
+                  child: const Text('Log Out')),
+            ),
+            (Get.height*0.1).heightBox()
           ],
         ),
       ),

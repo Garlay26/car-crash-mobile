@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:dio/dio.dart' as dio;
 import '../utils/custom_dialog.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -178,40 +177,41 @@ class ApiServices {
   }
 
 
-  // Future<Response?> apiFormDataCall(
-  //     {required String endPoint,
-  //     bool xNeedToken = false,
-  //     required Map<String, dynamic> data,
-  //     String type = 'application/json'}) async {
-  //   Response? response;
-  //   try {
-  //     dio.FormData formData = dio.FormData.fromMap(data);
-  //     var dioClient = dio.Dio();
-  //     dioClient.options = dioClient.options.copyWith(followRedirects: false);
-  //     var dioResponse = await dioClient.post('$baseUrl$endPoint',
-  //         options:
-  //             dio.Options(contentType: 'text/html; charset=utf-8', headers: {
-  //           'Access-Control-Allow-Origin': '*',
-  //           'Accept': '*/*',
-  //           'Content-Type': '$type; charset=UTF-8',
-  //           if (xNeedToken)
-  //             'Authorization': 'Bearer ${dataController.apiToken}',
-  //         }),
-  //         data: formData
-  //     );
-  //
-  //     superPrint(dioResponse);
-  //
-  //     response = Response(
-  //       statusCode: dioResponse.statusCode,
-  //       headers: {},
-  //       body: dioResponse.data,
-  //     );
-  //   } catch (e) {
-  //     superPrint(e);
-  //   }
-  //   return response;
-  // }
+  Future<Response?> apiFormDataCall({
+    required String endPoint,
+    bool xNeedToken = false,
+    required Map<String, dynamic> data,
+    String type = 'application/json'
+  }) async {
+    Response? response;
+    try {
+      dio.FormData formData = dio.FormData.fromMap(data);
+      var dioClient = dio.Dio();
+      dioClient.options = dioClient.options.copyWith(followRedirects: false);
+      var dioResponse = await dioClient.post('$baseUrl$endPoint',
+          options:
+              dio.Options(contentType: 'text/html; charset=utf-8', headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Accept': '*/*',
+            'Content-Type': '$type; charset=UTF-8',
+            if (xNeedToken)
+              'Authorization': 'Bearer ${dataController.apiToken}',
+          }),
+          data: formData
+      );
+
+      superPrint(dioResponse);
+
+      response = Response(
+        statusCode: dioResponse.statusCode,
+        headers: {},
+        body: dioResponse.data,
+      );
+    } catch (e) {
+      superPrint(e);
+    }
+    return response;
+  }
 }
 
 class ApiEndPoints {

@@ -69,9 +69,11 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {
                             controller.onClickRegister();
                           },
-                          child: const Text("Register Now",style: TextStyle(fontSize: 16),),
+                          child: const Text("Register Now",style: TextStyle(fontSize: 18),),
                         ),
                       ),
+                      10.heightBox(),
+                      const Text("Or",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
                       10.heightBox(),
                       SizedBox(
                         width: double.infinity,
@@ -80,7 +82,7 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {
                             controller.onClickEnterAsGuest();
                           },
-                          child: const Text("Enter as guest",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 12),),
+                          child: const Text("Enter as guest",style: TextStyle(color: Colors.deepOrangeAccent,fontWeight: FontWeight.bold,fontSize: 18),),
                         ),
                       ),
                     ],

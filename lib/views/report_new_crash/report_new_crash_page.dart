@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:dio/dio.dart' as dio;
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
 import 'package:car_crash_list/services/api_services.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ReportNewCrashPage extends StatefulWidget {
@@ -80,26 +81,54 @@ class _ReportNewCrashPageState extends State<ReportNewCrashPage> {
       MyDialog().showLoadingDialog();
       Response? response;
       try{
-        response = await ApiServices().apiPostCall(
-          endPoint: ApiEndPoints.reportCrash,
-          data: {
-            "carName" : txtCarName.text,
-            "location" : txtLocation.text,
-            "title" : txtTitle.text,
-            "discription" : txtDescription.text,
-            "images" : photos.value.map((each) async{
-              return (base64Encode(File(each).readAsBytesSync())).toString();
-            }).toList()
-          },
+        //await dio.MultipartFile.fromFile(imageFile.path, filename: 'poc.png')
+        response = await ApiServices().apiFormDataCall(
+            endPoint: ApiEndPoints.reportCrash,
+            data: {
+              "carName" : txtCarName.text,
+              "location" : txtLocation.text,
+              "title" : txtTitle.text,
+              "desc" : txtDescription.text,
+              "images" : photos.value.map((each) async{
+                // final tempDir = await getTemporaryDirectory();
+                // File imageFile = await File('${tempDir.path}/poc.png').create();
+                // imageFile.writeAsBytesSync(rawVoucherImage!);
+                int index = photos.value.indexOf(each);
+                return await dio.MultipartFile.fromFile(each, filename: 'img$index.png');
+                // return (base64Encode(File(each).readAsBytesSync())).toString();
+              }).toList()
+            },
           xNeedToken: true
         );
+        // response = await ApiServices().apiPostCall(
+        //   endPoint: ApiEndPoints.reportCrash,
+        //   data: {
+        //     "carName" : txtCarName.text,
+        //     "location" : txtLocation.text,
+        //     "title" : txtTitle.text,
+        //     "desc" : txtDescription.text,
+        //     "images" : photos.value.map((each) async{
+        //       return (base64Encode(File(each).readAsBytesSync())).toString();
+        //     }).toList()
+        //   },
+        //   xNeedToken: true
+        // );
       }
       catch(e){
         null;
       }
       Get.back(canPop: false);
-      Get.back(canPop: false);
-      MyDialog().showAlertDialog(message: 'The crash has been reported successfully!. It will be on the list after we review them.Thank you!');
+      superPrint(response!.body);
+      ApiServices().validateResponse(
+          response: response,
+          onSuccess: (data) {
+            Get.back(canPop: false);
+            MyDialog().showAlertDialog(message: 'The crash has been reported successfully!. It will be on the list after we review them.Thank you!');
+          },
+          onFailure: (data) {
+            MyDialog().showAlertDialog(message: "Something went wrong! Try again!");
+          },
+      );
     }
 
   }

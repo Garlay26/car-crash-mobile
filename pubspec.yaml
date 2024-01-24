@@ -54,6 +54,8 @@ dependencies:
   apple_maps_flutter: ^1.2.0
   image_picker: ^1.0.4
   permission_handler:
+  dio:
+  path_provider:
 #  animated_bottom_navigation_bar: ^1.2.0
 
 dev_dependencies:

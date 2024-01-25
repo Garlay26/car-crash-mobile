@@ -209,6 +209,9 @@ class ApiServices {
       );
     } catch (e) {
       superPrint(e);
+      if(e is dio.DioException){
+        superPrint(e.response!.data,title: e.response!.statusCode);
+      }
     }
     return response;
   }

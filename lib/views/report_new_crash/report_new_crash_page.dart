@@ -118,7 +118,6 @@ class _ReportNewCrashPageState extends State<ReportNewCrashPage> {
         null;
       }
       Get.back(canPop: false);
-      superPrint(response!.body);
       ApiServices().validateResponse(
           response: response,
           onSuccess: (data) {

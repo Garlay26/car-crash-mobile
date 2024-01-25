@@ -13,7 +13,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
+	<string>7.0</string>
 	<key>CFBundleName</key>
 	<string>car_crash_list</string>
 	<key>CFBundlePackageType</key>
@@ -25,7 +25,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>1.0.6</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3240907301025420~6674630735</string>
 	<key>LSApplicationQueriesSchemes</key>

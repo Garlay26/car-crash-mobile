@@ -78,11 +78,15 @@ class LoginPage extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         height: 50,
-                        child: TextButton(
+                        child: ElevatedButton(
                           onPressed: () {
                             controller.onClickEnterAsGuest();
                           },
-                          child: const Text("Enter as guest",style: TextStyle(color: Colors.deepOrangeAccent,fontWeight: FontWeight.bold,fontSize: 18),),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.yellow,
+                            elevation: 0
+                          ),
+                          child: const Text("Enter as guest",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
                         ),
                       ),
                     ],

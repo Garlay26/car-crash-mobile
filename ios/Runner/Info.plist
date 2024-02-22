@@ -13,7 +13,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
-	<string>7.0</string>
+	<string>8.0</string>
 	<key>CFBundleName</key>
 	<string>car_crash_list</string>
 	<key>CFBundlePackageType</key>
@@ -25,9 +25,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.6</string>
+	<string>1.0.8</string>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3240907301025420~6674630735</string>
+	<string>ca-app-pub-3240907301025420~7944063847</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>sms</string>

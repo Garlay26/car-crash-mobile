@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:car_crash_list/utils/custom_dialog.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../utils/app_constants.dart';
@@ -8,7 +10,7 @@ class AdsServices{
   Future<void> showInterAds() async{
     try{
       await InterstitialAd.load(
-          adUnitId: AppConstants.adMobInterstitialId,
+          adUnitId: Platform.isIOS?AppConstants.adMobInterstitialIdIos:AppConstants.adMobInterstitialId,
           request: const AdRequest(),
           adLoadCallback: InterstitialAdLoadCallback(
             onAdLoaded: (ad) async{

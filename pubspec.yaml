@@ -56,6 +56,7 @@ dependencies:
   permission_handler:
   dio:
   path_provider:
+  screen_protector: ^1.4.2
 #  animated_bottom_navigation_bar: ^1.2.0
 
 dev_dependencies:

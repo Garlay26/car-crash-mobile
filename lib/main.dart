@@ -10,6 +10,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 void main() async{
   Get.put(DataController());
@@ -19,6 +20,14 @@ void main() async{
   await Future.delayed(const Duration(seconds: 1));
   if(Platform.isAndroid){
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+  try{
+    if(Platform.isIOS){
+      await ScreenProtector.protectDataLeakageWithColor(Colors.white);
+    }
+  }
+  catch(e){
+    null;
   }
   runApp(const MyApp());
 }

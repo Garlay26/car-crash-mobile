@@ -36,7 +36,7 @@ class HomeMorePage extends StatelessWidget {
                     Image.asset(AppImages.logo,width: Get.width * 0.5,),
                     5.heightBox(),
                     const Text('Car Crash List',style: TextStyle(fontSize: 50,fontWeight: FontWeight.w600),),
-                    Text('App Version : 1.0.1',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: AppColors.green1),),
+                    Text('App Version : 1.0.9.9',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: AppColors.green1),),
                   ],
                 ),
               ),

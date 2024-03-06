@@ -2,12 +2,14 @@
 import 'dart:io';
 
 import 'package:car_crash_list/utils/custom_dialog.dart';
+import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../utils/app_constants.dart';
 
 class AdsServices{
 
   Future<void> showInterAds() async{
+    superPrint("sia");
     try{
       await InterstitialAd.load(
           adUnitId: Platform.isIOS?AppConstants.adMobInterstitialIdIos:AppConstants.adMobInterstitialId,

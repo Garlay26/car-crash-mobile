@@ -238,7 +238,13 @@ class HomeCrashListPage extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  controller.onClickSearch();
+                  try{
+                    controller.onClickSearch();
+                  }
+                  catch(e){
+                    null;
+                  }
+                  AdsServices().showInterAds();
                   // try{
                   //   AdsServices().showRewardAds(
                   //     onUserEarnReward: () {

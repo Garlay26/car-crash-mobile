@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:car_crash_list/models/car_detail.dart';
 import 'package:car_crash_list/models/car_news.dart';
@@ -17,6 +18,8 @@ class DataController extends GetxController{
 
   String apiToken = '';
   bool xFakeMode = true;
+  int appIosVersion = 10;
+  String appStoreLink = "";
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
     List<CarSales> result = [];
@@ -142,21 +145,43 @@ class DataController extends GetxController{
     return result;
   }
 
-  // Future<void> checkAppMode() async{
-  //   GetConnect getConnect = GetConnect(
-  //     timeout: const Duration(seconds: 90)
-  //   );
-  //   final response = await getConnect.get('https://raw.githubusercontent.com/ChawThida/ccl/main/x.json');
-  //   try{
-  //     Map<String,dynamic> data = jsonDecode(response.bodyString??'');
-  //     superPrint(data);
-  //     xFakeMode = data['body']['x'];
-  //     update();
-  //   }
-  //   catch(e){
-  //     superPrint(e);
-  //     null;
-  //   }
-  // }
+  Future<bool> xShouldGoToUpdatePage() async{
+    bool xResult = false;
+
+    if(Platform.isAndroid){
+      return xResult;
+    }
+
+
+    try{
+     var response = await ApiServices().apiGetCall(
+       endPoint: ApiEndPoints.version,
+     );
+     if(response!.isOk){
+       int cloudIosVersion = int.tryParse(response.body["iosVersion"].toString())??-1;
+       if(cloudIosVersion < 0){
+         return false;
+       }
+       else if(cloudIosVersion > appIosVersion){
+         return true;
+       }
+       else if(cloudIosVersion < appIosVersion){
+         xFakeMode = true;
+         return false;
+       }
+       else if(cloudIosVersion == appIosVersion){
+         xFakeMode = false;
+         return false;
+       }
+       superPrint(response.body);
+     }
+   }
+   catch(e){
+     null;
+   }
+
+    return xResult;
+
+  }
 
 }

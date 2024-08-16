@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:car_crash_list/controllers/data_controller.dart';
+import 'package:car_crash_list/gate_way_page.dart';
 import 'package:car_crash_list/utils/app_colors.dart';
 import 'package:car_crash_list/views/auth/login/v_login_page.dart';
 import 'package:car_crash_list/views/auth/profile/profile_controller.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
             titleSmall: defaultTextStyle,
           )
       ),
-      home: const LoginPage(),
+      home: const GateWayPage(),
     );
   }
 }

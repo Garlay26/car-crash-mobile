@@ -242,6 +242,7 @@ class ApiEndPoints {
   static const String mapDataList = "map-data/list";
   static const String reportMapData = "map-data/create";
   static const String accountDelete = "delete_user";
+  static const String version = "version";
 
 
 }

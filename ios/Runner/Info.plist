@@ -37,6 +37,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>To Upload Crash Photos Report</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For nearby car sales</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To Upload Crash Videos Report</string>
 	<key>NSPhotoLibraryUsageDescription</key>

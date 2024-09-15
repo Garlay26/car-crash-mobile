@@ -18,7 +18,8 @@ class DataController extends GetxController{
 
   String apiToken = '';
   bool xFakeMode = true;
-  int appIosVersion = 10;
+  int appIosVersion = 11;
+  int appAndroidVersion = 11;
   String appStoreLink = "";
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
@@ -158,21 +159,42 @@ class DataController extends GetxController{
        endPoint: ApiEndPoints.version,
      );
      if(response!.isOk){
-       int cloudIosVersion = int.tryParse(response.body["iosVersion"].toString())??-1;
-       if(cloudIosVersion < 0){
-         return false;
+       superPrint(response.body);
+       if(Platform.isIOS || Platform.isMacOS){
+         int cloudIosVersion = int.tryParse(response.body["iosVersion"].toString())??-1;
+         if(cloudIosVersion < 0){
+           return false;
+         }
+         else if(cloudIosVersion > appIosVersion){
+           return true;
+         }
+         else if(cloudIosVersion < appIosVersion){
+           xFakeMode = true;
+           return false;
+         }
+         else if(cloudIosVersion == appIosVersion){
+           xFakeMode = false;
+           return false;
+         }
        }
-       else if(cloudIosVersion > appIosVersion){
-         return true;
+       else if(Platform.isAndroid){
+         int cloudAndroidVersion = int.tryParse(response.body["androidVersion"].toString())??-1;
+         if(cloudAndroidVersion < 0){
+           return false;
+         }
+         else if(cloudAndroidVersion > appAndroidVersion){
+           return true;
+         }
+         else if(cloudAndroidVersion < appAndroidVersion){
+           xFakeMode = true;
+           return false;
+         }
+         else if(cloudAndroidVersion == appAndroidVersion){
+           xFakeMode = false;
+           return false;
+         }
        }
-       else if(cloudIosVersion < appIosVersion){
-         xFakeMode = true;
-         return false;
-       }
-       else if(cloudIosVersion == appIosVersion){
-         xFakeMode = false;
-         return false;
-       }
+
        superPrint(response.body);
      }
    }

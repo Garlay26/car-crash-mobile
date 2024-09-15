@@ -41,15 +41,15 @@ dependencies:
   shared_preferences:
   cached_network_image:
   flutter_super_scaffold:
-  flutter_carousel_widget: ^2.1.0
+  flutter_carousel_widget: ^3.0.1
   glassmorphism: ^3.0.0
-  flutter_widget_from_html_core: ^0.9.1
-  share_plus: ^6.0.0
+  flutter_widget_from_html_core: ^0.15.2
+  share_plus: ^10.0.2
   animated_text_kit: ^4.2.2
   url_launcher: ^6.1.14
   flutter_windowmanager: ^0.2.0
 #  admob_flutter: ^3.0.0
-  google_mobile_ads: ^3.0.0
+  google_mobile_ads: ^5.1.0
   app_tracking_transparency: ^2.0.4
   apple_maps_flutter: ^1.2.0
   image_picker: ^1.0.4
@@ -68,7 +68,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -20,6 +20,7 @@ class CarDetailPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.black,
         centerTitle: false,
+        leading: const BackButton(color: Colors.white,),
         title: GetBuilder<CarDetailController>(
           builder: (controller) {
             if(controller.carDetail!=null){
@@ -57,13 +58,16 @@ class CarDetailPage extends StatelessWidget {
                 );
               }
               else{
-                return Column(
-                  children: [
-                    Text(controller.carDetail!.description,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
-                    10.heightBox(),
-                    Expanded(
-                      child: ListView.builder(
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(controller.carDetail!.description*20,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                      10.heightBox(),
+                      ListView.builder(
                         padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: controller.carDetail!.images.length,
                         itemBuilder: (context, index) {
                           String image = controller.carDetail!.images[index];
@@ -93,9 +97,9 @@ class CarDetailPage extends StatelessWidget {
                             ),
                           );
                         },
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 );
               }
             }

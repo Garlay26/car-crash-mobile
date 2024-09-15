@@ -86,7 +86,7 @@ class SaleDetailPage extends StatelessWidget {
                 width: double.infinity,
                 height: Get.width * 0.5,
                 child: FlutterCarousel(
-                  options: CarouselOptions(
+                  options: FlutterCarouselOptions(
                     autoPlay: true,
                     allowImplicitScrolling: true,
                     enlargeCenterPage: false,

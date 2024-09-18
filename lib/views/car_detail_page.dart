@@ -62,7 +62,7 @@ class CarDetailPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(controller.carDetail!.description*20,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
+                      Text(controller.carDetail!.description,style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                       10.heightBox(),
                       ListView.builder(
                         padding: EdgeInsets.zero,

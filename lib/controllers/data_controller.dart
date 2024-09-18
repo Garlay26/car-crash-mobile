@@ -18,8 +18,8 @@ class DataController extends GetxController{
 
   String apiToken = '';
   bool xFakeMode = true;
-  int appIosVersion = 11;
-  int appAndroidVersion = 11;
+  int appIosVersion = 12;
+  int appAndroidVersion = 12;
   String appStoreLink = "";
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
@@ -148,16 +148,11 @@ class DataController extends GetxController{
 
   Future<bool> xShouldGoToUpdatePage() async{
     bool xResult = false;
-
-    if(Platform.isAndroid){
-      return xResult;
-    }
-
-
     try{
      var response = await ApiServices().apiGetCall(
        endPoint: ApiEndPoints.version,
      );
+     superPrint(response);
      if(response!.isOk){
        superPrint(response.body);
        if(Platform.isIOS || Platform.isMacOS){
@@ -194,11 +189,11 @@ class DataController extends GetxController{
            return false;
          }
        }
-
        superPrint(response.body);
      }
    }
    catch(e){
+      superPrint(e);
      null;
    }
 

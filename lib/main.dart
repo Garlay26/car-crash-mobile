@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
             800: Color.fromRGBO(29, 44, 77, .9),
             900: Color.fromRGBO(29, 44, 77, 1),
           }),
+          useMaterial3: false,
           textTheme: TextTheme(
             bodyMedium: defaultTextStyle,
             titleMedium: defaultTextStyle,

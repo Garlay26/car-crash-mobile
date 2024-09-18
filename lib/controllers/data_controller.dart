@@ -18,9 +18,10 @@ class DataController extends GetxController{
 
   String apiToken = '';
   bool xFakeMode = true;
-  int appIosVersion = 12;
-  int appAndroidVersion = 12;
+  int appIosVersion = 13;
+  int appAndroidVersion = 13;
   String appStoreLink = "";
+  String playStoreLink = "";
 
   Future<List<CarSales>> fetchSaleData({required int pageIndex}) async{
     List<CarSales> result = [];
@@ -155,6 +156,8 @@ class DataController extends GetxController{
      superPrint(response);
      if(response!.isOk){
        superPrint(response.body);
+       appStoreLink = response.body["appStoreLink"].toString();
+       playStoreLink = response.body["playStoreLink"].toString();
        if(Platform.isIOS || Platform.isMacOS){
          int cloudIosVersion = int.tryParse(response.body["iosVersion"].toString())??-1;
          if(cloudIosVersion < 0){

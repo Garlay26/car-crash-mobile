@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:car_crash_list/controllers/data_controller.dart';
 import 'package:car_crash_list/views/auth/login/v_login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_super_scaffold/flutter_super_scaffold.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GateWayPage extends StatefulWidget {
   const GateWayPage({super.key});
@@ -49,7 +52,28 @@ class _GateWayPageState extends State<GateWayPage> {
             );
           }
           else{
-            return const Text("New version is published! Please download it from store to continue!");
+            return SizedBox.expand(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "New version is available! Please update to continue!"
+                  ),
+                  ElevatedButton(onPressed: () {
+                    String link = "";
+                    DataController dataController = Get.find();
+                    if(Platform.isAndroid){
+                      link = dataController.playStoreLink;
+                    }
+                    else{
+                      link = dataController.appStoreLink;
+                    }
+                    launchUrl(Uri.parse(link));
+                  }, child: const Text("Update Now"))
+                ],
+              ),
+            );
           }
         },
       ),
